@@ -4,10 +4,10 @@ import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisCluster;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.SimpleFormatter;
 
 public class JedisTest {
     public static void main(String[] args) {
@@ -21,7 +21,18 @@ public class JedisTest {
         System.out.println("s = " + s);
         jedis.incr(key);
 
-       //key
+
+        long l = System.currentTimeMillis();
+        System.out.println("l = " + l);
+        Date date = new Date(l);
+        System.out.println("date = " + date);
+
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date1 = new Date();
+        System.out.println(format.format(date1));
+
+        //key
         //获取所有的keys并将集合付给keys
 /*        Set<String> keys = jedis.keys("*");
         for (String next : keys) {

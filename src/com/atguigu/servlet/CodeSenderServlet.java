@@ -1,6 +1,8 @@
 package com.atguigu.servlet;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 
 import javax.servlet.ServletException;
@@ -44,12 +46,21 @@ public class CodeSenderServlet extends HttpServlet {
         }
 
         //每个手机号每天只能输入三次
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String format = simpleDateFormat.format(new Date());
+
         Jedis jedis = new Jedis(VerifyCodeConfig.HOST, VerifyCodeConfig.PORT);
         String countKey = VerifyCodeConfig.PHONE_PREFIX + phoneNo + VerifyCodeConfig.COUNT_SUFFIX;
+        String dateKey = VerifyCodeConfig.PHONE_PREFIX + phoneNo + VerifyCodeConfig.COUNT_DATE;
+        String date = jedis.get(dateKey);
+        if (!format.equals(date)){
+            jedis.del(countKey);
+        }
         String count = jedis.get(countKey);
         if (count == null) {
-            //第一次
+            //当天第一次
             jedis.setex(countKey, VerifyCodeConfig.SECONDS_PER_DAY, "1");
+            jedis.setex(dateKey,VerifyCodeConfig.SECONDS_PER_DAY,format);
         } else {
             int integer = Integer.parseInt(count);
             if (integer < VerifyCodeConfig.COUNT_TIMES_1DAY) {

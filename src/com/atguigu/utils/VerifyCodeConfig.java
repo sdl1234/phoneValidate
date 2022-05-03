@@ -7,6 +7,8 @@ public interface VerifyCodeConfig {
     public static String CODE_SUFFIX = ":code";    //验证码key后缀 
     
     public static String COUNT_SUFFIX = ":count";    //计数器key后缀
+
+    public static String COUNT_DATE = ":date";   //日期key后缀
     
     public static int CODE_LEN = 6;   //随机码长度
     
